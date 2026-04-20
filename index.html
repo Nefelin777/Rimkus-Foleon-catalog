@@ -23,15 +23,17 @@
             display: flex; 
             gap: 10px; 
             flex-wrap: wrap; 
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
             padding: 0 20px;
+            box-sizing: border-box;
+            justify-content: flex-start;
         }
 
         .btn { 
             /* Шрифти кнопки: Raleway 24px, uppercase, regular */
             font-family: 'Raleway', sans-serif;
-            font-size: 24px;
+            font-size: 16px;
             text-transform: uppercase;
             font-weight: 400;
             
@@ -139,7 +141,7 @@
 <div class="grid"></div>
 
 <script>
-const sheetUrl = 'ТВОЄ_ПОСИЛАННЯ_З_GOOGLE_SHEETS_CSV';
+const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSXuFx3_R87npfKsZh4iBvBgX0EA427a-STifaSQASfKEGIbIuyq05NHfPSdGxsKsijfWMn0ObuMMo8/pub?gid=0&single=true&output=csv';
 
 async function initArchive() {
     try {
