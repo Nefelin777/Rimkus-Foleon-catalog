@@ -59,7 +59,9 @@
             margin: 0 auto !important;
             padding: 0 10px;
         }
-        
+        .grid-sizer, .element-item { 
+            width: 25%;
+        }        
         .element-item { 
             width: 100%; 
             padding: 15px;
@@ -196,7 +198,11 @@ async function initArchive() {
             });
         $('.btn').on('click', function() {
             const filterValue = $(this).attr('data-filter');
-            $grid.isotope({ filter: filterValue });
+            const finalFilter = (filterValue === '*') ? '*' : '.' + filterValue;
+            $grid.isotope({ filter: finalFilter });
+            setTimeout(() => {
+                $grid.isotope('layout');
+            }, 100);
             $('.btn').removeClass('active');
             $(this).addClass('active');
         });
