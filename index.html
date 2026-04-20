@@ -1,105 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Raleway:wght@400&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
     <style>
-        body { font-family: 'Helvetica', sans-serif; margin: 0; padding: 20px; }
+        body { margin: 0; padding: 0; background: #fff; }
         
-        /* Кнопки */
-        .filters { margin-bottom: 30px; }
-        .btn { 
-            padding: 10px 25px; cursor: pointer; border: none; 
-            background: #f0f0f0; margin-right: 10px; transition: 0.3s;
-            border-radius: 4px; font-weight: bold; color: #555;
+        /* Фіксована панель фільтрів */
+        .filters-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #fff;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
         }
-        .btn:hover, .btn.active { background: #00acc8; color: white; }
+
+        .filters { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn { 
+            /* Шрифти кнопки: Raleway 24px, uppercase, regular */
+            font-family: 'Raleway', sans-serif;
+            font-size: 24px;
+            text-transform: uppercase;
+            font-weight: 400;
+            
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            /* Кольори: неактивна - біла з обводкою 046A78 */
+            background: #fff;
+            color: #046A78;
+            border: 2px solid #046A78;
+            /* Прямі кути */
+            border-radius: 0;
+        }
+
+        .btn.active, .btn:hover { 
+            /* Активна/ховер - 046A78, текст білий */
+            background: #046A78; 
+            color: #fff; 
+        }
 
         /* Сітка */
-        .grid { width: 100%; }
+        .grid { 
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 10px;
+        }
+        
         .element-item { 
-            width: 30%; /* 3 колонки */
-            margin-bottom: 25px;
-            float: left;
-            padding: 10px;
+            width: 33.333%; 
+            padding: 15px;
             box-sizing: border-box;
         }
 
+        /* Картка */
         .card {
             border: 1px solid #eee;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: box-shadow 0.3s;
-            text-decoration: none;
+            border-radius: 0; /* Прямі кути */
             display: block;
+            text-decoration: none;
             color: #333;
+            transition: 0.3s;
         }
         .card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .card-content { padding: 15px; display: flex; justify-content: space-between; align-items: center;}
+        
+        .card img { 
+            width: 100%; 
+            display: block; 
+            border-radius: 0;
+        }
+
+        .card-info { 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .card-info strong { 
+            /* Шрифти назви: Montserrat 14, bold */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.4;
+            max-width: 80%;
+        }
+
+        /* Коротша та жирна стрілка */
+        .arrow {
+            font-size: 20px;
+            font-weight: 900;
+            border-bottom: 3px solid #046A78;
+            border-right: 3px solid #046A78;
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            transform: rotate(-45deg);
+            margin-bottom: 5px;
+        }
+
+        /* Адаптивність */
+        @media (max-width: 992px) { .element-item { width: 50%; } .btn { font-size: 18px; } }
+        @media (max-width: 576px) { .element-item { width: 100%; } .btn { font-size: 16px; width: 100%; } }
     </style>
 </head>
 <body>
 
-<div class="filters">
-    <button class="btn active" data-filter="*">ALL</button>
-    <button class="btn" data-filter=".brochures">BROCHURES</button>
-    <button class="btn" data-filter=".flyers">FLYERS</button>
+<div class="filters-wrapper">
+    <div class="filters">
+        <button class="btn active" data-filter="*">ALL</button>
+        <button class="btn" data-filter=".bes-brochures">BES - Brochures</button>
+        <button class="btn" data-filter=".bes-flyers">BES - Flyers</button>
+        <button class="btn" data-filter=".bes-soqs">BES - SOQs</button>
+        <button class="btn" data-filter=".forensics-brochures">Forensics - Brochures</button>
+        <button class="btn" data-filter=".forensics-flyers">Forensics - Flyers</button>
+        <button class="btn" data-filter=".forensics-soqs">Forensics - SOQs</button>
+        <button class="btn" data-filter=".global-brochures">Global - Brochures</button>
+        <button class="btn" data-filter=".global-flyers">Global - Flyers</button>
+        <button class="btn" data-filter=".multidisciplinary-soqs">Multidisc. - SOQs</button>
+        <button class="btn" data-filter=".qd-brochures">Q&D - Brochures</button>
+        <button class="btn" data-filter=".qd-flyers">Q&D - Flyers</button>
+        <button class="btn" data-filter=".qd-soqs">Q&D - SOQs</button>
+    </div>
 </div>
 
-<div class="grid">
-    </div>
+<div class="grid"></div>
 
 <script>
-// 1. Посилання на твою Google Таблицю (формат CSV)
 const sheetUrl = 'ТВОЄ_ПОСИЛАННЯ_З_GOOGLE_SHEETS_CSV';
 
-// Функція завантаження даних
-async function loadData() {
-    const response = await fetch(sheetUrl);
-    const data = await response.text();
-    const rows = data.split('\n').slice(1); // пропускаємо заголовок
+async function initArchive() {
+    try {
+        const response = await fetch(sheetUrl);
+        const csvText = await response.text();
+        const rows = csvText.split(/\r?\n/).slice(1);
+        const grid = $('.grid');
 
-    const grid = $('.grid');
-    
-    rows.forEach(row => {
-        const columns = row.split(','); // Розбиваємо рядок на колонки
-        if(columns.length < 4) return;
+        rows.forEach(row => {
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (cols.length < 4) return;
+            const [title, cat, img, link] = cols.map(c => c.trim().replace(/^"|"$/g, ''));
 
-        const [title, category, img, link] = columns.map(c => c.trim());
+            // Робимо клас для фільтрації сумісним (без пробілів та спецсимволів)
+            const filterClass = cat.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-        const html = `
-            <div class="element-item ${category.toLowerCase()}">
-                <a href="${link}" target="_blank" class="card">
-                    <img src="${img}" alt="${title}">
-                    <div class="card-content">
-                        <strong>${title}</strong>
-                        <span>→</span>
-                    </div>
-                </a>
-            </div>`;
-        grid.append(html);
-    });
+            const html = `
+                <div class="element-item ${filterClass}">
+                    <a href="${link}" target="_blank" class="card">
+                        <img src="${img}" alt="${title}">
+                        <div class="card-info">
+                            <strong>${title}</strong>
+                            <div class="arrow"></div>
+                        </div>
+                    </a>
+                </div>`;
+            grid.append(html);
+        });
 
-    // Ініціалізація Isotope після завантаження всіх карток
-    var $grid = $('.grid').isotope({
-        itemSelector: '.element-item',
-        layoutMode: 'fitRows',
-        stagger: 30,
-        transitionDuration: '0.6s' // Швидкість анімації
-    });
+        const $grid = grid.isotope({
+            itemSelector: '.element-item',
+            layoutMode: 'fitRows',
+            transitionDuration: '0.5s'
+        });
 
-    // Логіка фільтрації
-    $('.btn').on('click', function() {
-        var filterValue = $(this).attr('data-filter');
-        $grid.isotope({ filter: filterValue });
-        $('.btn').removeClass('active');
-        $(this).addClass('active');
-    });
+        $('.btn').on('click', function() {
+            const filterValue = $(this).attr('data-filter');
+            $grid.isotope({ filter: filterValue });
+            $('.btn').removeClass('active');
+            $(this).addClass('active');
+        });
+
+    } catch (error) { console.error(error); }
 }
-
-loadData();
+initArchive();
 </script>
 
 </body>
