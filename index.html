@@ -191,7 +191,9 @@ async function initArchive() {
             },
             transitionDuration: '0.5s'
         });
-
+            $grid.imagesLoaded().progress( function() {
+                $grid.isotope('layout');
+            });
         $('.btn').on('click', function() {
             const filterValue = $(this).attr('data-filter');
             $grid.isotope({ filter: filterValue });
