@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Raleway:wght@400&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
     <style>
         body { margin: 0; padding: 0; background: #fff; }
         
@@ -168,8 +169,8 @@ async function initArchive() {
             if (cols.length < 4) return;
             const [title, cat, img, link] = cols.map(c => c.trim().replace(/^"|"$/g, ''));
 
-            // Робимо клас для фільтрації сумісним (без пробілів та спецсимволів)
-            const filterClass = cat.toLowerCase().replace(/[^a-z0-9]/g, '-');
+            // Генеруємо клас: "BES - Brochures" стане "bes-brochures"
+            const filterClass = cat.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
 
             const html = `
                 <div class="element-item ${filterClass}">
@@ -184,6 +185,7 @@ async function initArchive() {
             grid.append(html);
         });
 
+        // Ініціалізація Isotope
         const $grid = grid.isotope({
             itemSelector: '.element-item',
             layoutMode: 'masonry',
@@ -193,21 +195,34 @@ async function initArchive() {
             },
             transitionDuration: '0.5s'
         });
+
+        // Фікс "пливучої" сітки після завантаження картинок
+        if ($.fn.imagesLoaded) {
             $grid.imagesLoaded().progress( function() {
                 $grid.isotope('layout');
             });
+        }
+
+        // Обробка кліку по кнопках
         $('.btn').on('click', function() {
             const filterValue = $(this).attr('data-filter');
-            const finalFilter = (filterValue === '*') ? '*' : '.' + filterValue;
-            $grid.isotope({ filter: finalFilter });
-            setTimeout(() => {
-                $grid.isotope('layout');
-            }, 100);
+            
+            // Фільтруємо. Оскільки в HTML крапки вже є, використовуємо filterValue як є
+            $grid.isotope({ filter: filterValue });
+
+            // Оновлюємо активну кнопку
             $('.btn').removeClass('active');
             $(this).addClass('active');
+
+            // Невеликий тайм-аут для перерахунку
+            setTimeout(() => {
+                $grid.isotope('layout');
+            }, 200);
         });
 
-    } catch (error) { console.error(error); }
+    } catch (error) { 
+        console.error("Помилка ініціалізації:", error); 
+    }
 }
 initArchive();
 </script>
