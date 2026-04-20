@@ -56,7 +56,7 @@
         /* Сітка */
         .grid { 
             max-width: 100%;
-            margin: 0 auto;
+            margin: 0 auto !important;
             padding: 0 10px;
         }
         
@@ -184,7 +184,11 @@ async function initArchive() {
 
         const $grid = grid.isotope({
             itemSelector: '.element-item',
-            layoutMode: 'fitRows',
+            layoutMode: 'masonry',
+            masonry: {
+                columnWidth: '.element-item',
+                isFitWidth: true
+            },
             transitionDuration: '0.5s'
         });
 
