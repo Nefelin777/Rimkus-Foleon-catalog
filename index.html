@@ -56,13 +56,13 @@
 
         /* Сітка */
         .grid { 
-            max-width: 100%;
+            max-width: 100% !important;
             margin: 0 auto !important;
-            padding: 0 10px;
+            display: flex !important;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        .grid-sizer, .element-item { 
-            width: 25%;
-        }        
+       
         .element-item { 
             width: 100%; 
             padding: 15px;
@@ -121,13 +121,13 @@
 
         /* Адаптивність */
         @media (min-width: 600px) {
-            .element-item { width: 50%; }
+            .element-item { width: 50% !important; } }
         }
         @media (min-width: 1024px) {
-            .element-item { width: 33.333%; }
+            .element-item { width: 33.333% !important; } }
         }
         @media (min-width: 1600px) {
-            .element-item { width: 25%; }
+            .element-item { width: 25% !important; } }
         }
         
     </style>
@@ -169,7 +169,7 @@ async function initArchive() {
             if (cols.length < 4) return;
             const [title, cat, img, link] = cols.map(c => c.trim().replace(/^"|"$/g, ''));
 
-            // Генеруємо клас: "BES - Brochures" стане "bes-brochures"
+            // Робимо чистий клас для фільтрів
             const filterClass = cat.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
 
             const html = `
@@ -185,44 +185,33 @@ async function initArchive() {
             grid.append(html);
         });
 
-        // Ініціалізація Isotope
+        // Ініціалізація Isotope в найпростішому режимі
         const $grid = grid.isotope({
             itemSelector: '.element-item',
-            layoutMode: 'masonry',
-            masonry: {
-                columnWidth: '.element-item',
-                isFitWidth: true
-            },
-            transitionDuration: '0.5s'
+            layoutMode: 'fitRows', // Повертаємо стабільний режим
+            transitionDuration: '0.4s' // Трохи швидша анімація, щоб не "пливло"
         });
 
-        // Фікс "пливучої" сітки після завантаження картинок
-        if ($.fn.imagesLoaded) {
-            $grid.imagesLoaded().progress( function() {
-                $grid.isotope('layout');
-            });
-        }
+        // Оновлюємо розкладку після завантаження фото
+        grid.imagesLoaded().progress(() => {
+            $grid.isotope('layout');
+        });
 
-        // Обробка кліку по кнопках
         $('.btn').on('click', function() {
             const filterValue = $(this).attr('data-filter');
             
-            // Фільтруємо. Оскільки в HTML крапки вже є, використовуємо filterValue як є
+            // Запускаємо фільтрацію (в HTML у тебе кнопки вже з крапками)
             $grid.isotope({ filter: filterValue });
 
-            // Оновлюємо активну кнопку
+            // Візуальний стан кнопок
             $('.btn').removeClass('active');
             $(this).addClass('active');
-
-            // Невеликий тайм-аут для перерахунку
-            setTimeout(() => {
-                $grid.isotope('layout');
-            }, 200);
+            
+            // Примусовий перерахунок через короткий час
+            setTimeout(() => $grid.isotope('layout'), 300);
         });
 
-    } catch (error) { 
-        console.error("Помилка ініціалізації:", error); 
-    }
+    } catch (error) { console.error("Error:", error); }
 }
 initArchive();
 </script>
