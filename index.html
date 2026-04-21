@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Raleway:wght@400&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
     <style>
         body { margin: 0; padding: 0; background: #fff; }
         
-        /* Фіксована панель фільтрів */
         .filters-wrapper {
             position: sticky;
             top: 0;
@@ -23,63 +21,64 @@
             display: flex; 
             gap: 10px; 
             flex-wrap: wrap; 
-            max-width: 100%;
-            margin: 0;
             padding: 0 20px;
             box-sizing: border-box;
-            justify-content: flex-start;
         }
 
         .btn { 
             font-family: 'Raleway', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             text-transform: uppercase;
-            font-weight: 400;
-            
             padding: 10px 20px;
             cursor: pointer;
-            transition: 0.3s;
-            /* Кольори: неактивна - біла з обводкою 046A78 */
             background: #fff;
             color: #046A78;
             border: 2px solid #046A78;
-            /* Прямі кути */
-            border-radius: 0;
+            transition: 0.3s;
         }
 
         .btn.active, .btn:hover { 
-            /* Активна/ховер - 046A78, текст білий */
             background: #046A78; 
             color: #fff; 
         }
 
-        /* Сітка */
+        /* ЧИСТА СІТКА GRID */
         .grid {
             display: grid;
-
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            /* По замовчуванню 1 колонка (мобілки) */
+            grid-template-columns: 1fr;
             gap: 25px; 
             padding: 20px;
-            width: 100%;
             box-sizing: border-box;
-            justify-content: center;
         }
-       
+
+        /* Адаптивність через зміну кількості колонок у Grid */
+        @media (min-width: 600px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1600px) {
+            .grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
         .element-item {
-            width: 100%; /* Тепер Grid сам керує шириною */
+            width: 100%;
             display: block;
-            transition: opacity 0.3s ease; /* М'яка поява замість польотів Isotope */
         }
+
         .element-item.hidden {
             display: none;
         }
+
         /* Картка */
         .card {
             border: 1px solid #eee;
-            border-radius: 0; /* Прямі кути */
             display: block;
             text-decoration: none;
             color: #333;
+            transition: 0.3s;
         }
         .card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
@@ -88,7 +87,6 @@
             height: 220px;
             object-fit: cover;
             display: block; 
-            border-radius: 0;
         }
 
         .card-info { 
@@ -101,38 +99,20 @@
         }
 
         .card-info strong { 
-            /* Шрифти назви: Montserrat 14, bold */
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
             font-weight: 700;
             line-height: 1.4;
-            max-width: 80%;
         }
 
-        /* Коротша та жирна стрілка */
         .arrow {
-            font-size: 20px;
-            font-weight: 900;
             border-bottom: 3px solid #046A78;
             border-right: 3px solid #046A78;
             width: 10px;
             height: 10px;
             display: inline-block;
             transform: rotate(-45deg);
-            margin-bottom: 5px;
         }
-
-        /* Адаптивність */
-        @media (min-width: 600px) {
-            .element-item { width: 50% !important; } }
-        }
-        @media (min-width: 1024px) {
-            .element-item { width: 33.333% !important; } }
-        }
-        @media (min-width: 1600px) {
-            .element-item { width: 25% !important; } }
-        }
-        
     </style>
 </head>
 <body>
@@ -172,7 +152,6 @@ async function initArchive() {
             if (cols.length < 4) return;
             const [title, cat, img, link] = cols.map(c => c.trim().replace(/^"|"$/g, ''));
 
-            // Чистий клас без крапки
             const filterClass = cat.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
 
             const html = `
@@ -188,9 +167,7 @@ async function initArchive() {
             grid.append(html);
         });
 
-        // ФІЛЬТРАЦІЯ
         $('.btn').on('click', function() {
-            // Отримуємо значення, прибираємо крапку для порівняння з класом
             const filterValue = $(this).attr('data-filter').replace('.', '');
             
             if (filterValue === '*') {
